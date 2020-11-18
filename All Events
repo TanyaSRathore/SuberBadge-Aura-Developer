@@ -1,0 +1,46 @@
+/* FormSubmit event .evt */
+
+<aura:event type="COMPONENT" description="Event template" >
+    
+    <aura:attribute name = "formData" type = "Object"/>
+    
+</aura:event>
+
+/* FormSubmit event .evt ENDEND */
+------------------------------------------------------------------------------------------------------
+/* BoatSelect event .evt */
+
+<aura:event type="COMPONENT"  >
+    <aura:attribute name = "boatId" type = "String"/>
+</aura:event>
+
+/* BoatSelect event .evt END */
+------------------------------------------------------------------------------------------------------
+/* BoatSelected event .evt */
+
+<aura:event type="APPLICATION" description="Event template" >
+    <aura:attribute name = "boat" type = "Boat__c"/>
+</aura:event>
+
+/* BoatSelected event .evt END */
+<aura:event type="COMPONENT" description="Event template" >
+------------------------------------------------------------------------------------------------------
+/* BoatReviewAdded event .evt */
+
+<aura:event type="COMPONENT" description="Event template" >
+</aura:event>
+
+/* BoatReviewAdded event .evt END*/
+------------------------------------------------------------------------------------------------------
+/* PlotMapMarker event .evt */
+
+<aura:event type="APPLICATION" description="Event template" >
+    
+    <aura:attribute type = "String" name = "sObjectId"/>
+    <aura:attribute type = "String" name = "lat"/>
+    <aura:attribute type = "String" name = "long"/>
+    <aura:attribute type = "String" name = "label"/>
+    
+</aura:event>
+
+/* PlotMapMarker event .evt END*/

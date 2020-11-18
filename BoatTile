@@ -1,0 +1,95 @@
+/* BoatTile .cmp */
+
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <aura:attribute name = 'boat' type = 'Boat__c'/>
+    <aura:attribute name = "selected" type = "Boolean" default = 'false'/>
+    
+    <aura:registerEvent name= "BoatSelect" type = "c:BoatSelect" />
+    <aura:registerEvent name = "BoatSelected" type = "c:BoatSelected"/>
+    <aura:registerEvent name = "PlotMapMarker" type = "c:PlotMapMarker"/>
+    
+    <aura:handler name = "init" action = "{!c.doInit}" value = "{!this}"/>
+    
+    <lightning:button class = "{!v.selected == true ? 'tile selected' : 'tile'}" onclick = "{!c.onBoatClick}" >
+        <div style="{! 'background-image:url(' + v.boat.Picture__c + ');' }" class="innertile">
+            <div class="lower-third">
+                <h1 class="slds-truncate">{!v.boat.Contact__r.Name}</h1>
+            </div>
+        </div>
+    </lightning:button>
+    
+</aura:component>
+
+/* BoatTile .cmp END */
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* BoatTile CONTROLLER .js */
+
+({
+    doInit : function(component, event, helper) {
+        console.log('Boat Tile Boat '+component.get("v.boat"));
+        console.log('Selcted '+component.get("v.selected"));
+    },
+    
+    onBoatClick : function(component,event,helper){
+        console.log('Selected clicked');
+        var boatIdSelectEvent = component.getEvent("BoatSelect");
+        var getBoat = component.get("v.boat");
+        
+        boatIdSelectEvent.setParams({
+            "boatId" : getBoat.Id
+        });
+        boatIdSelectEvent.fire();
+        console.log('firing second');
+        var boatSelectEvent = $A.get("e.c:BoatSelected");
+        boatSelectEvent.setParams({
+            "boat" : getBoat
+        });
+        boatSelectEvent.fire();
+        
+        var plotMarker = $A.get("e.c:PlotMapMarker");
+        console.log('Latitude ' +getBoat.Geolocation__Latitude__s);
+        if(plotMarker){
+            plotMarker.setParams({
+                "sObjectId" : getBoat.Id,
+                "lat" : getBoat.Geolocation__Latitude__s,
+                "long" : getBoat.Geolocation__Longitude__s,
+                "label" : getBoat.Name
+            });
+            plotMarker.fire();
+        }
+    }
+})
+
+/* BoatTile CONTROLLER .js END */
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* BoatTile STYLE .css */
+
+.THIS.tile {
+    position:relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 1px !important;
+}
+.THIS.innertile {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+.THIS.lower-third {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, .4);
+    padding: 6px 8px;
+}
+.THIS.selected {
+   border: 3px solid rgb(0, 112, 210);
+}
+
+/* BoatTile STYLE .css END */

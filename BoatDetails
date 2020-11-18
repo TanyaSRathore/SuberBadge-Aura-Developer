@@ -1,0 +1,68 @@
+/* Boat Details .cmp */
+
+<aura:component implements = "flexipage:availableForAllPageTypes" access = "global" >
+    
+    <aura:attribute name = "boat" type = "Boat__c"/>
+    <aura:attribute name = "id" type= "Id"/>
+    <aura:attribute name = "targetErrorFound" type = "String"/>
+    
+    
+    <aura:handler name = "BoatReviewAdded" event = "c:BoatReviewAdded" action = "{!c.onBoatReviewAdded}"/>
+    
+    
+    <aura:handler event = "c:BoatSelected" action = "{!c.onBoatSelected}"/>
+    
+    <force:recordData aura:id = "service"
+                      recordId = "{!v.id}"
+                      fields = "Id,Name,Description__c,Price__c,Length__c,Contact__r.Name,Contact__r.Email,Contact__r.HomePhone,BoatType__r.Name,Picture__c"
+                      targetFields = "{!v.boat}"
+                      recordUpdated = "{!c.onRecordUpdated}"
+                      targetError = "{!v.targetErrorFound}"/>
+    
+    <aura:if isTrue = "{!not(empty(v.boat))}">
+        <lightning:tabset aura:id = 'tabs' selectedTabId = 'details'>
+            <lightning:tab label = 'DETAILS' id = 'details'>
+                <c:BoatDetail boat = "{!v.boat}"/>
+            </lightning:tab>
+            <lightning:tab id = 'boatreviewtab' label = 'REVIEWS'>
+                <c:BoatReviews aura:id = "boatReviews" boat = "{!v.boat}"/>
+            </lightning:tab>
+            <lightning:tab label = 'ADD REVIEW'>
+                <c:AddBoatReview boat = "{!v.boat}"/>
+            </lightning:tab>
+        </lightning:tabset>
+    </aura:if>
+    
+</aura:component>
+
+/* Boat Details .cmp END */
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* Boat Details CONTROLLER .js */
+
+({
+    onBoatSelected : function(component, event, helper) {
+        console.log('Boat Selected');
+        var getBoat = event.getParam("boat");
+        console.log(JSON.stringify(getBoat));
+        var boatId = getBoat.Id;
+        component.set("v.id" , boatId);
+        component.find("service").reloadRecord();
+    },
+    
+    onRecordUpdated : function(component,event,helper){
+        var boatReview = component.find('boatReviews');
+        if(boatReview)
+        boatReview.refresh();
+    } ,
+    
+    onBoatReviewAdded : function(component,event,helper){
+        console.log('Handling');
+        component.find('tabs').set("v.selectedTabId" , 'boatreviewtab' );
+        var boatReview = component.find('boatReviews');
+        if(boatReview)
+        boatReview.refresh();
+    }
+})
+
+/* Boat Details CONTROLLER .js END*/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,9 @@
+public class BoatSearchFormApexController {
+
+    @AuraEnabled
+    public static List<BoatType__c> getBoatTypes(){
+        List<BoatType__c> boatTypeList = new List<BoatType__c>([Select Id, Name from BoatType__c ]);
+        System.debug(boatTypeList);
+        return boatTypeList;
+    }
+}

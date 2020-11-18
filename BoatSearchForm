@@ -25,3 +25,66 @@
 </aura:component>
 
 /* BOAT SEARCH FORM .cmp END */
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* BOAT SEARCH FORM CONTROLLER .js */
+({
+	doInit : function(component, event, helper) {
+        //console.log('in init');
+       var isEnabled = $A.get("e.force:createRecord");
+        if(isEnabled){
+            component.set('v.isButtonDisabled' , false)
+        }
+		var action = component.get("c.getBoatTypes");
+        action.setCallback(this,function(response){
+            if(response.getState() === "SUCCESS"){
+                var boatTypeList = response.getReturnValue();
+                //console.log('boatTypeList'+ boatTypeList);
+                component.set("v.boatTypes",boatTypeList);
+            }
+        });
+        $A.enqueueAction(action);
+	},
+    
+    handledNewClick : function(component,event,helper){
+        //console.log('Clicked!');
+        var boatTypeVal = component.find("selectboatType").get("v.value");
+        //console.log('boatTypeVal '+boatTypeVal);
+        var createNewRecord = $A.get('e.force:createRecord');
+        console.log('Test' +JSON.stringify(createNewRecord));
+        createNewRecord.setParams({
+            "entityApiName" : "Boat__c"
+            
+        });
+        if(boatTypeVal){
+            createNewRecord.setParams({
+                "defaultFieldValues" : {
+                    'BoatType__c' : boatTypeVal
+                }
+            });
+        }
+        createNewRecord.fire();	
+    },
+    
+    onFormSubmit : function(component,event,helper){
+        
+        var boatTypeid = component.find("selectboatType").get("v.value");
+        var boatTypeData = {
+            "boatTypeId" : boatTypeid
+        };
+        var formSubmitEvent = component.getEvent("formsubmit");
+        //console.log('formSubmitEvent '+formSubmitEvent);
+        formSubmitEvent.setParams ({
+            "formData" : boatTypeData
+        });
+        //console.log('firing');
+        formSubmitEvent.fire();
+        
+    }
+})
+/* BOAT SEARCH FORM CONTROLLER .js END */
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+

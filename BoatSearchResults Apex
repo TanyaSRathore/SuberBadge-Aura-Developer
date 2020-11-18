@@ -1,0 +1,16 @@
+public class BoatSearchResults {
+
+    @AuraEnabled
+    public static List<Boat__c> getBoats(String boatTypeId){
+        List<Boat__c> boatList = new List<Boat__c>();
+        if(boatTypeId != '' && boatTypeId != null ){
+            boatList = [Select Id, Name, Picture__c, Contact__c, Contact__r.Name,Geolocation__c,Geolocation__latitude__s,Geolocation__longitude__s from  Boat__c where BoatType__c = :boatTypeId];
+        }
+        else{
+          boatList = [Select Id, Name,Geolocation__latitude__s,Geolocation__longitude__s  from  Boat__c];
+        }
+        System.debug ('List is '+boatList);
+        System.debug ('Size is '+boatList.size());
+        return boatList;
+    }
+}

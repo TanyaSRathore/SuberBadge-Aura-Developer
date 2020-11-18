@@ -1,0 +1,43 @@
+/* BoatSearch .cmp */
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    
+    <aura:handler name = "formsubmit" event = "c:FormSubmit" action = "{!c.onFormSubmit}"/>
+    
+    <div style = "margin-bottom:10px">
+        <lightning:card title = "Find a Boat">
+            <c:BoatSearchForm/>
+        </lightning:card>
+    </div>
+    
+    <lightning:card title = "Matching Boats">
+        <c:BoatSearchResults aura:id = "boatSearchResults"/>
+    </lightning:card>
+    
+</aura:component>
+
+/* BoatSearch .cmp END */
+------------------------------------------------------------------------------------------------------------------------------------------------------
+/* BoatSearch CONTROLLER .js */
+
+({
+	onFormSubmit : function(component, event, helper) {
+        //console.log('In BoatSearch');
+		var getEventParams = event.getParam("formData");
+        console.log('Handling'+ JSON.stringify(getEventParams.boatTypeId) );
+        var bsrCmp = component.find("boatSearchResults");
+        var message = bsrCmp.search(getEventParams.boatTypeId);
+	}
+})
+
+/* BoatSearch CONTROLLER .js END */
+------------------------------------------------------------------------------------------------------------------------------------------------------
+/* FormSubmit .evt */
+
+<aura:event type="COMPONENT" description="Event template" >
+    
+    <aura:attribute name = "formData" type = "Object"/>
+    
+</aura:event>
+
+/* FormSubmit .evt END */

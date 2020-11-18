@@ -1,0 +1,27 @@
+/* BOAT SEARCH FORM .cmp */
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller = "BoatSearchFormApexController">
+    
+    <aura:attribute name = "boatTypes" type = "BoatType__c[]"/>
+    <aura:attribute name = "isButtonDisabled" default = "false" type = "Boolean"/>
+    
+    <aura:handler name = "init" action = "{!c.doInit}" value = "{!this}"/>
+    
+    <aura:registerEvent name = "formsubmit" type = "c:FormSubmit" />
+    
+    <lightning:layout horizontalAlign = "center" verticalAlign = "end">
+        
+            <lightning:select name="boatType" aura:id = "selectboatType">
+                <option value = "" label = "All Types"></option>
+                <aura:iteration items = "{!v.boatTypes}" var = "bt">
+                    <option value = "{!bt.Id}" label = "{!bt.Name}"></option>
+                </aura:iteration>
+            </lightning:select>
+            <lightning:button variant = "brand" label = "Search" onclick = "{!c.onFormSubmit}"/>
+        <aura:if isTrue = "{!!v.isButtonDisabled}">
+            <lightning:button aura:id = "newButton" variant = "neutral" label = "New" onclick = "{!c.handledNewClick}" />
+        </aura:if>
+    </lightning:layout>
+    
+</aura:component>
+
+/* BOAT SEARCH FORM .cmp END */

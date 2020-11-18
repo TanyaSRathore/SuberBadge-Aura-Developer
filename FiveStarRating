@@ -1,0 +1,82 @@
+/* FiveStarRating .cmp */
+
+<aura:component >
+    <aura:attribute name = "value" type = "Integer" default = "0"/>
+    <aura:attribute name = "readonly" type = "Boolean" default = "false"/>
+    
+    <ltng:require
+                  styles = "{!$Resource.fivestar+'/rating.css'}"
+                  scripts = "{!$Resource.fivestar+'/rating.js'}"
+                  afterScriptsLoaded = "{!c.afterScriptsLoaded}"/>
+    
+    <aura:handler name = "change" value = "{!v.value}" action = "{!c.onValueChange}"/>
+    
+    <ul aura:id = "ratingarea" class = "{!v.readonly == true ? 'readonly c-rating' : 'c-rating'}"/>
+    
+</aura:component>
+
+/* FiveStarRating .cmp end */
+----------------------------------------------------------------------------------------------------------------------------------
+/* FiveStarRating CONTROLLER .js */
+
+({
+    afterScriptsLoaded : function(component, event, helper) {
+        var domEl = component.find('ratingarea').getElement();
+        var currentRating = component.get("v.value");
+        var readOnly = component.get("v.readonly");
+        var maxRating = 5;
+        var callback = function(rating) {
+            component.set('v.value',rating);
+        }
+        component.ratingObj = rating(domEl,currentRating,maxRating,callback,readOnly);
+    },
+    
+    
+    
+    onValueChange: function(component,event,helper) {
+        if (component.ratingObj) {
+            var value = component.get('v.value');
+            component.ratingObj.setRating(value,false);
+        }
+    }
+})
+
+/* FiveStarRating CONTROLLER .js END*/
+----------------------------------------------------------------------------------------------------------------------------------
+/* FiveStarRating STYLE .css */
+
+.THIS.c-rating {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.THIS.c-rating__item {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 24px;
+      -ms-flex: 0 0 24px;
+          flex: 0 0 24px;
+  height: 24px;
+  background: url("/resource/fivestar/stars.svg");
+  background-position: 0 0;
+  cursor: pointer;
+}
+
+.THIS.c-rating__item:hover,
+.THIS.c-rating__item.is-active {
+  background-position: -24px 0;
+}
+
+.THIS.readonly .c-rating__item:hover {
+  background-position: inherit !important;
+}
+
+.THIS.readonly .c-rating__item.is-active:hover {
+  background-position: -24px 0 !important;
+}
+
+/* FiveStarRating STYLE .css END*/ 

@@ -31,13 +31,3 @@
 })
 
 /* BoatSearch CONTROLLER .js END */
-------------------------------------------------------------------------------------------------------------------------------------------------------
-/* FormSubmit .evt */
-
-<aura:event type="COMPONENT" description="Event template" >
-    
-    <aura:attribute name = "formData" type = "Object"/>
-    
-</aura:event>
-
-/* FormSubmit .evt END */
